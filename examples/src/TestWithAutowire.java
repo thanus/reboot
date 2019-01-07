@@ -1,12 +1,15 @@
 package org.example;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@AllArgsConstructor(onConstructor = @__(@Autowired))
-public class Autowired {
+public class TestWithAutowire {
   @Autowired
   private A a;
   @Autowired
-  B b;
+  private B b;
+  
+  @Test
+  public void testSomething() {
+    assertThat(1, 1);
+  }
 }

@@ -11,7 +11,7 @@ list[Tree] parse(list[loc] sourceFiles) {
   list[loc] ambFiles = [];
   list[loc] parseErrorFiles = [];
   
-  for (loc file <- sourceFiles) { 
+  for (loc file <- sourceFiles) {
     try {
       Tree parseTree = parse(#start[CompilationUnit], file, allowAmbiguity = true);
       
