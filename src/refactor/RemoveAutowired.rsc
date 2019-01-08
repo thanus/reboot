@@ -3,6 +3,8 @@ module refactor::RemoveAutowired
 import ParseTree;
 import lang::java::\syntax::Java15;
 
+import search::Search;
+
 Tree removeAutowired(Tree tree) {
   bool isNoTest = !isTest(tree);
   
@@ -54,5 +56,3 @@ Tree removeAutowired(Tree tree) {
   
   return tree;
 }
-
-bool isTest(Tree tree) = /(Anno)`@Test` := tree;

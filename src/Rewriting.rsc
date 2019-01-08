@@ -3,7 +3,10 @@ module Rewriting
 import Prelude;
 import ParseTree;
 import lang::java::\syntax::Java15;
+
 import refactor::RemoveAutowired;
+import refactor::RefactorInjectMocks;
+
 import util::DirectoryTraverser;
 import util::Parse;
 
@@ -20,6 +23,8 @@ void rewrite(loc project) {
   
   for (Tree parseTree <- parseTrees) {
     Tree tree = removeAutowired(parseTree);
+    tree = refactorInjectMocks(tree);
+    
     writeFile(parseTree@\loc, tree);
   }
 }
