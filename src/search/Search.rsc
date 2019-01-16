@@ -1,6 +1,6 @@
 module search::Search
 
 import ParseTree;
-import lang::java::\syntax::Java15;
+import lang::java::\syntax::Java18;
 
-bool isTest(Tree tree) = /(Anno)`@Test` := tree;
+bool isTest(Tree tree) = /(Annotation)`@Test` := tree;

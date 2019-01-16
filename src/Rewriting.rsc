@@ -2,7 +2,7 @@ module Rewriting
 
 import Prelude;
 import ParseTree;
-import lang::java::\syntax::Java15;
+import lang::java::\syntax::Java18;
 
 import refactor::RemoveAutowired;
 import refactor::RefactorInjectMocks;

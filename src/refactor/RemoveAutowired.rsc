@@ -1,7 +1,7 @@
 module refactor::RemoveAutowired
 
 import ParseTree;
-import lang::java::\syntax::Java15;
+import lang::java::\syntax::Java18;
 
 import search::Search;
 
@@ -9,49 +9,22 @@ Tree removeAutowired(Tree tree) {
   bool isNoTest = !isTest(tree);
   
   tree = innermost visit (tree) {
-    case (Anno)`@AllArgsConstructor(onConstructor = @__(@Autowired))` => (Anno)`@AllArgsConstructor`
-    case (CompilationUnit)`<PackageDec? p>
-                          '
-                          '<ImportDec* i1>
-                          'import org.springframework.beans.factory.annotation.Autowired;
-                          '<ImportDec* i2>
-                          '
-                          '<TypeDec* t>`
-      => (CompilationUnit)`<PackageDec? p>
-                          '
-                          '<ImportDec* i1>
-                          '<ImportDec* i2>
-                          '
-                          '<TypeDec* t>`
+    case (Annotation)`@AllArgsConstructor(onConstructor = @__(@Autowired))` => (Annotation)`@AllArgsConstructor`
+    case (Imports)`<ImportDeclaration* i1>
+                  'import org.springframework.beans.factory.annotation.Autowired;
+                  '<ImportDeclaration* i2>`
+      => (Imports)`<ImportDeclaration* i1>
+                  '<ImportDeclaration* i2>`
       when isNoTest
   }
 
-  tree = innermost visit (tree) {
-    case (ClassBody)`{
-                    '  <ClassBodyDec* cs1>
-                    '  @Autowired
-                    '  <FieldMod f> <Type t><Id id>;
-                    '  <ClassBodyDec* cs2>
-                    '}`
-      => (ClassBody)`{
-                    '  <ClassBodyDec* cs1>
-                    '  <FieldMod f> final <Type t><Id id>;
-                    '  <ClassBodyDec* cs2>
-                    '}`
+  tree = visit (tree) {
+    case (FieldDeclaration)`@Autowired <FieldModifier* f> <UnannType t><VariableDeclaratorId i>;`
+      => (FieldDeclaration)`<FieldModifier* f> final <UnannType t><VariableDeclaratorId i>;`
       when isNoTest
-    case (ClassBody)`{
-                    '  <ClassBodyDec* cb1>
-                    '  @Autowired
-                    '  <Type t><Id id>;
-                    '  <ClassBodyDec* cb2>
-                    '}`
-      => (ClassBody)`{
-                    '  <ClassBodyDec* cb1>
-                    '  final <Type t><Id id>;
-                    '  <ClassBodyDec* cb2>
-                    '}`
+    case (FieldDeclaration)`@Autowired <UnannType t><VariableDeclaratorId i>;`
+      => (FieldDeclaration)`final <UnannType t><VariableDeclaratorId i>;`
       when isNoTest
-    
   }
   
   return tree;

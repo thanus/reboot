@@ -3,7 +3,7 @@ module util::Parse
 import IO;
 import List;
 import ParseTree;
-import lang::java::\syntax::Java15;
+import lang::java::\syntax::Java18;
 
 list[Tree] parse(list[loc] sourceFiles) {
   list[Tree] parseTrees = [];
