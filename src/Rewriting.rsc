@@ -22,7 +22,7 @@ void rewrite(loc project) {
   list[Tree] parseTrees = parse(sourceFiles);
   
   for (Tree parseTree <- parseTrees) {
-    Tree tree = removeAutowired(parseTree);
+    Tree tree = refactorFieldInjectionToConstructor(parseTree);
     tree = refactorInjectMocks(tree);
     
     writeFile(parseTree@\loc, tree);

@@ -6,11 +6,18 @@ import String;
 
 import search::Search;
 
-Tree removeAutowired(Tree tree) {
+Tree refactorFieldInjectionToConstructor(Tree tree) {
   bool isNoTest = !isTest(tree);
-  bool needsConstructor(tree) = !containsAutowired(tree) && isNoTest;
   
-  tree = innermost visit (tree) {
+  tree = removeAutowiredImportAndAllArgs(tree, isNoTest);
+  tree = addConstructorWhenNotSpecified(tree, isNoTest);
+  tree = removeAutowiredOnFields(tree, isNoTest);
+  
+  return tree;
+}
+
+Tree removeAutowiredImportAndAllArgs(Tree tree, bool isNoTest) {
+  return innermost visit (tree) {
     case (Annotation)`@AllArgsConstructor(onConstructor = @__(@Autowired))` => (Annotation)`@AllArgsConstructor`
     case (Imports)`<ImportDeclaration* i1>
                   'import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +26,12 @@ Tree removeAutowired(Tree tree) {
                   '<ImportDeclaration* i2>`
       when isNoTest
   }
+}
+
+Tree addConstructorWhenNotSpecified(Tree tree, bool isNoTest) {
+  bool needsConstructor(tree) = !containsAutowired(tree) && isNoTest;
   
-  tree = visit (tree) {
+  return visit (tree) {
     case (NormalClassDeclaration)`<ClassModifier* cm> class <Identifier i> <TypeParameters? t><Superclass? su><Superinterfaces? sInf><ClassBody cb>`
       => (NormalClassDeclaration)`@AllArgsConstructor
                                  '<ClassModifier* cm> class <Identifier i> <TypeParameters? t><Superclass? su><Superinterfaces? sInf><ClassBody cb>`
@@ -33,8 +44,10 @@ Tree removeAutowired(Tree tree) {
                   '<ImportDeclaration* i2>`
       when needsConstructor(tree)
   }
+}
 
-  tree = visit (tree) {
+Tree removeAutowiredOnFields(Tree tree, bool isNoTest) {
+  return visit (tree) {
     case (FieldDeclaration)`@Autowired <FieldModifier* f> <UnannType t><VariableDeclaratorId i>;`
       => (FieldDeclaration)`<FieldModifier* f> final <UnannType t><VariableDeclaratorId i>;`
       when isNoTest
@@ -42,6 +55,4 @@ Tree removeAutowired(Tree tree) {
       => (FieldDeclaration)`final <UnannType t><VariableDeclaratorId i>;`
       when isNoTest
   }
-  
-  return tree;
 }
