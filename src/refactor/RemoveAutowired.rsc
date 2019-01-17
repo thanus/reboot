@@ -2,11 +2,13 @@ module refactor::RemoveAutowired
 
 import ParseTree;
 import lang::java::\syntax::Java18;
+import String;
 
 import search::Search;
 
 Tree removeAutowired(Tree tree) {
   bool isNoTest = !isTest(tree);
+  bool needsConstructor(tree) = !containsAutowired(tree) && isNoTest;
   
   tree = innermost visit (tree) {
     case (Annotation)`@AllArgsConstructor(onConstructor = @__(@Autowired))` => (Annotation)`@AllArgsConstructor`
@@ -16,6 +18,20 @@ Tree removeAutowired(Tree tree) {
       => (Imports)`<ImportDeclaration* i1>
                   '<ImportDeclaration* i2>`
       when isNoTest
+  }
+  
+  tree = visit (tree) {
+    case (NormalClassDeclaration)`<ClassModifier* cm> class <Identifier i> <TypeParameters? t><Superclass? su><Superinterfaces? sInf><ClassBody cb>`
+      => (NormalClassDeclaration)`@AllArgsConstructor
+                                 '<ClassModifier* cm> class <Identifier i> <TypeParameters? t><Superclass? su><Superinterfaces? sInf><ClassBody cb>`
+      when needsConstructor(tree)
+    
+    case (Imports)`<ImportDeclaration* i1>
+                  '<ImportDeclaration* i2>`
+      => (Imports)`<ImportDeclaration* i1>
+                  'import lombok.AllArgsConstructor;
+                  '<ImportDeclaration* i2>`
+      when needsConstructor(tree)
   }
 
   tree = visit (tree) {
