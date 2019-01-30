@@ -68,11 +68,11 @@ Tree rewriteSpyAnnotation(Tree tree) {
   VariableInitializer createVarInitWithSpy(VariableInitializer varInit) = [VariableInitializer]"Mockito.spy(<varInit>)";
   
   return visit (tree) {
-    case (FieldDeclaration)`@Spy <FieldModifier* f> <UnannType t><VariableDeclaratorId i> = <VariableInitializer varInit>;`
-      => (FieldDeclaration)`<FieldModifier* f> <UnannType t><VariableDeclaratorId i> = <VariableInitializer vInit>;`
+    case (FieldDeclaration)`@Spy <FieldModifier* f> <UnannType t><VariableDeclaratorId i>= <VariableInitializer varInit>;`
+      => (FieldDeclaration)`<FieldModifier* f> <UnannType t><VariableDeclaratorId i>= <VariableInitializer vInit>;`
       when VariableInitializer vInit := createVarInitWithSpy(varInit)
-    case (FieldDeclaration)`@Spy <UnannType t><VariableDeclaratorId i> = <VariableInitializer varInit>;`
-      => (FieldDeclaration)`<UnannType t><VariableDeclaratorId i> = <VariableInitializer vInit>;`
+    case (FieldDeclaration)`@Spy <UnannType t><VariableDeclaratorId i>= <VariableInitializer varInit>;`
+      => (FieldDeclaration)`<UnannType t><VariableDeclaratorId i>= <VariableInitializer vInit>;`
       when VariableInitializer vInit := createVarInitWithSpy(varInit)
  }
 }
