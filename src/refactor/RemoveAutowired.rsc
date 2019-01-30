@@ -29,7 +29,7 @@ Tree removeAutowiredImportAndAllArgs(Tree tree, bool isNoTest) {
 }
 
 Tree addConstructorWhenNotSpecified(Tree tree, bool isNoTest) {
-  bool needsConstructor(tree) = !containsAutowired(tree) && isNoTest;
+  bool needsConstructor(tree) = containsAutowired(tree) && !hasAllArgsConstructor(tree) && isNoTest;
   
   return visit (tree) {
     case (NormalClassDeclaration)`<ClassModifier* cm> class <Identifier i> <TypeParameters? t><Superclass? su><Superinterfaces? sInf><ClassBody cb>`
