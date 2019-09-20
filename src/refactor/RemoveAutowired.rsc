@@ -6,7 +6,7 @@ import String;
 
 import search::Search;
 
-Tree refactorFieldInjectionToConstructor(Tree tree) {
+public Tree refactorFieldInjectionToConstructor(Tree tree) {
   bool isNoTest = !isTest(tree);
   
   tree = removeAutowiredImportAndAllArgs(tree, isNoTest);

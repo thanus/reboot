@@ -5,7 +5,7 @@ import lang::java::\syntax::Java18;
 import String;
 import IO;
 
-Tree refactorInjectMocks(Tree tree) {
+public Tree refactorInjectMocks(Tree tree) {
   tree = rewriteMockitoImports(tree);
   
   tree = rewriteMockAnnotation(tree);
