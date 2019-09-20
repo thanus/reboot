@@ -7,16 +7,18 @@ import String;
 import search::Search;
 
 public Tree refactorFieldInjectionToConstructor(Tree tree) {
-  bool isNoTest = !isTest(tree);
+  if (isTest(tree)) {
+    return tree;
+  }
   
-  tree = removeAutowiredImportAndAllArgs(tree, isNoTest);
-  tree = addConstructorWhenNotSpecified(tree, isNoTest);
-  tree = removeAutowiredOnFields(tree, isNoTest);
+  tree = removeAutowiredImportAndAllArgs(tree);
+  tree = addConstructorWhenNotSpecified(tree);
+  tree = removeAutowiredOnFields(tree);
   
   return tree;
 }
 
-Tree removeAutowiredImportAndAllArgs(Tree tree, bool isNoTest) {
+Tree removeAutowiredImportAndAllArgs(Tree tree) {
   return innermost visit (tree) {
     case (Annotation)`@AllArgsConstructor(onConstructor = @__(@Autowired))` => (Annotation)`@AllArgsConstructor`
     case (Imports)`<ImportDeclaration* i1>
@@ -24,12 +26,11 @@ Tree removeAutowiredImportAndAllArgs(Tree tree, bool isNoTest) {
                   '<ImportDeclaration* i2>`
       => (Imports)`<ImportDeclaration* i1>
                   '<ImportDeclaration* i2>`
-      when isNoTest
   }
 }
 
-Tree addConstructorWhenNotSpecified(Tree tree, bool isNoTest) {
-  bool needsConstructor(tree) = containsAutowired(tree) && !hasAllArgsConstructor(tree) && isNoTest;
+Tree addConstructorWhenNotSpecified(Tree tree) {
+  bool needsConstructor(tree) = containsAutowired(tree) && !hasAllArgsConstructor(tree);
   
   return visit (tree) {
     case (NormalClassDeclaration)`<ClassModifier* cm> class <Identifier i> <TypeParameters? t><Superclass? su><Superinterfaces? sInf><ClassBody cb>`
@@ -46,13 +47,11 @@ Tree addConstructorWhenNotSpecified(Tree tree, bool isNoTest) {
   }
 }
 
-Tree removeAutowiredOnFields(Tree tree, bool isNoTest) {
+Tree removeAutowiredOnFields(Tree tree) {
   return visit (tree) {
     case (FieldDeclaration)`@Autowired <FieldModifier* f> <UnannType t><VariableDeclaratorId i>;`
       => (FieldDeclaration)`<FieldModifier* f> final <UnannType t><VariableDeclaratorId i>;`
-      when isNoTest
     case (FieldDeclaration)`@Autowired <UnannType t><VariableDeclaratorId i>;`
       => (FieldDeclaration)`final <UnannType t><VariableDeclaratorId i>;`
-      when isNoTest
   }
 }
