@@ -30,20 +30,20 @@ Tree removeAutowiredImportAndAllArgs(Tree tree) {
 }
 
 Tree addConstructorWhenNotSpecified(Tree tree) {
-  bool needsConstructor(tree) = containsAutowired(tree) && !hasAllArgsConstructor(tree);
+  bool needsConstructor = containsAutowired(tree) && !hasAllArgsConstructor(tree);
   
   return visit (tree) {
     case (NormalClassDeclaration)`<ClassModifier* cm> class <Identifier i> <TypeParameters? t><Superclass? su><Superinterfaces? sInf><ClassBody cb>`
       => (NormalClassDeclaration)`@AllArgsConstructor
                                  '<ClassModifier* cm> class <Identifier i> <TypeParameters? t><Superclass? su><Superinterfaces? sInf><ClassBody cb>`
-      when needsConstructor(tree)
+      when needsConstructor
     
     case (Imports)`<ImportDeclaration* i1>
                   '<ImportDeclaration* i2>`
       => (Imports)`<ImportDeclaration* i1>
                   'import lombok.AllArgsConstructor;
                   '<ImportDeclaration* i2>`
-      when needsConstructor(tree)
+      when needsConstructor
   }
 }
 
