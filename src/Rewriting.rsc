@@ -11,10 +11,15 @@ import util::DirectoryTraverser;
 import util::Parse;
 
 public void main(str arg) {
+  datetime startTime = now();
+  
   loc project = |file:///| + arg;
   checkIfLocationExistsAndIsDirectory(project);
   
   rewrite(project);
+  
+  Duration duration = now() - startTime;
+  println("Rewriting completed in <duration>");
 }
 
 void rewrite(loc project) {
