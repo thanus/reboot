@@ -30,7 +30,7 @@ public class UsersController {
         return ResponseEntity.ok(usersService.findAll());
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         final Optional<User> optionalUser = usersService.findById(id);
         return optionalUser.map(ResponseEntity::ok)

@@ -6,6 +6,7 @@ import lang::java::\syntax::Java18;
 
 import refactor::RemoveAutowired;
 import refactor::RefactorInjectMocks;
+import refactor::RewriteHTTPMapping;
 
 import util::DirectoryTraverser;
 import util::Parse;
@@ -29,6 +30,7 @@ void rewrite(loc project) {
   for (Tree parseTree <- parseTrees) {
     Tree tree = refactorFieldInjectionToConstructor(parseTree);
     tree = refactorInjectMocks(tree);
+    tree = refactorWithExplicitHTTPMapping(tree);
     
     writeFile(parseTree@\loc, tree);
   }
