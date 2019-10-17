@@ -1,4 +1,4 @@
-module Rewriting
+module ReBoot
 
 import Prelude;
 import ParseTree;
@@ -19,7 +19,7 @@ public void main(str arg) {
   rewrite(project);
   
   Duration duration = now() - startTime;
-  println("Rewriting completed in <duration>");
+  println("ReBoot completed in <duration>");
 }
 
 void rewrite(loc project) {

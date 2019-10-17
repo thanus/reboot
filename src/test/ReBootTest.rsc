@@ -1,4 +1,4 @@
-module \test::RewritingTest
+module \test::ReBootTest
 
 extend \test::refactor::RefactorInjectMocksTest;
 extend \test::refactor::RemoveAutowiredTest;
