@@ -1,5 +1,0 @@
-Manifest-Version: 0.0.1
-Main-Function: main
-Main-Module: Plugin
-Source: src
-
