@@ -1,15 +1,18 @@
 # ReBoot
+
 A refactoring tool to automatically apply best practices in Java / Spring-Boot applications.
 ReBoot performs the following refactorings on a project:
 
-* [HTTP Mapping](#HTTP-Mapping)
-* [Field injection with Spring Autowired](#Field-injection-with-Spring-Autowired)
-* [Field injection with Mockito](#Field-injection-with-Mockito)
+*   [HTTP Mapping](#HTTP-Mapping)
+*   [Field injection with Spring Autowired](#Field-injection-with-Spring-Autowired)
+*   [Field injection with Mockito](#Field-injection-with-Mockito)
 
 ## Refactorings
 
 ### HTTP Mapping
+
 Before ([Full source](examples/users/src/main/java/nl/thanus/demo/controllers/UsersController.java))
+
 ```java
 @RestController
 @RequestMapping("/users")
@@ -27,6 +30,7 @@ public class UsersController {
 ```
 
 After
+
 ```java
 @RestController
 @RequestMapping("/users")
@@ -44,7 +48,9 @@ public class UsersController {
 ```
 
 ### Field injection with Spring Autowired
+
 Before ([Full source](examples/users/src/main/java/nl/thanus/demo/controllers/UsersController.java))
+
 ```java
 @RestController
 @RequestMapping("/users")
@@ -57,6 +63,7 @@ public class UsersController {
 ```
 
 After
+
 ```java
 @AllArgsConstructor
 @RestController
@@ -68,7 +75,9 @@ public class UsersController {
 ```
 
 ### Field injection with Mockito
+
 Before ([Full source](examples/users/src/test/java/nl/thanus/demo/controllers/UsersControllerTest.java))
+
 ```java
 @ExtendWith(value = MockitoExtension.class)
 class UsersControllerTest {
@@ -82,6 +91,7 @@ class UsersControllerTest {
 ```
 
 After
+
 ```java
 @ExtendWith(value = MockitoExtension.class)
 class UsersControllerTest {
@@ -97,28 +107,36 @@ This can easily be done manually, of course it is better if it is automated.
 ## Usage
 
 ### Requirements
-* [Rascal](https://www.rascal-mpl.org). Follow the installation steps on the page [Rascal MPL Start](https://www.rascal-mpl.org/start/).
-* JDK >= 1.8
+
+*   [Rascal](https://www.rascal-mpl.org). Follow the installation steps on the page [Rascal MPL Start](https://www.rascal-mpl.org/start/).
+*   JDK >= 1.8
 
 ### Import project in Eclipse
-1. Start Eclipse
-2. Click on `File`
-   * Click on `Open Projects from File System...`
-   * Import the project through the `Directory...`
-   * Complete the steps through the wizard
+
+1.  Start Eclipse
+2.  Click on `File`
+    *   Click on `Open Projects from File System...`
+    *   Import the project through the `Directory...`
+    *   Complete the steps through the wizard
 
 ### Run
-1. Open the file [ReBoot.rsc](src/ReBoot.rsc) from the `Rascal Navigator`
-2. Right click in the editor and select the `Start Console` option. This will start a console (Rascal REPL).
-3. Import ReBoot module in console
-    ```
-    import ReBoot;
-    ```
-4. Run the module by calling the [main](src/ReBoot.rsc#L14) function with the path to the project to be refactored.
-   For example, for the [example project](examples/users) in this repo:
-    ```
-    main("/path/to/project/reboot/examples/users");
-    ```
-   Replace `/path/to/project` of the path with the right path.
-5. Hitting `Enter` will run the main function. When the refactoring is finished, it prints to the console that it is
-   completed.
+
+1.  Open the file [ReBoot.rsc](src/ReBoot.rsc) from the `Rascal Navigator`
+2.  Right click in the editor and select the `Start Console` option. This will start a console (Rascal REPL).
+3.  Import ReBoot module in console `import ReBoot;`
+4.  Run the module by calling the [main](src/ReBoot.rsc#L14) function with the path to the project to be refactored.
+    For example, for the [example project](examples/users) in this repo:
+        main("/path/to/project/reboot/examples/users");
+    Replace `/path/to/project` of the path with the right path.
+5.  Hitting `Enter` will run the main function. When the refactoring is finished, it prints to the console that it is
+    completed.
+
+### CLI
+
+1.  Clone the ReBoot project
+2.  Download the standalone commandline console from the Rascal MPL website: [rascal-shell-unstable.jar](https://update.rascal-mpl.org/console/rascal-shell-unstable.jar)
+    *   Currently, the project makes use of the unstable branch of Rascal
+3.  Put the `rascal-shell-unstable.jar` file into the root of the ReBoot project
+    *   Where the *ReBoot.rsc* file resides
+4.  Run the project like follow: *`java -Xmx1G -Xss32m -jar rascal-shell-unstable.jar ReBoot.rsc <path>`*
+    *   Replace the `<path>` with the path to your project

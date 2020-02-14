@@ -11,7 +11,7 @@ import refactor::RewriteHTTPMapping;
 import util::DirectoryTraverser;
 import util::Parse;
 
-public void main(str arg) {
+public void main(str arg = "") {
   datetime startTime = now();
   
   loc project = |file:///| + arg;
