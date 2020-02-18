@@ -6,6 +6,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.MemberValuePair
 import com.github.javaparser.ast.expr.Name
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
+import com.github.javaparser.ast.expr.SimpleName
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
 import com.github.javaparser.ast.expr.StringLiteralExpr
 
@@ -26,22 +27,32 @@ private fun rewritePathVariableName(parameter: Parameter) {
 private fun rewriteSinglePathVariable(annotationExpr: SingleMemberAnnotationExpr, parameter: Parameter) {
     val memberValue = annotationExpr.memberValue
 
-    if (memberValue is StringLiteralExpr) {
-        if (memberValue.value == parameter.nameAsString) {
-            parameter.annotations
-                    .first { isPathVariableAnnotation(it) }
-                    .remove()
-
-            parameter.addMarkerAnnotation(PATH_VARIABLE)
-        }
+    if (memberValue is StringLiteralExpr && memberValue.value == parameter.nameAsString) {
+        replacePathVariableWithMarkerAnnotation(parameter)
     }
 }
 
 private fun rewriteNormalPathVariable(annotationExpr: NormalAnnotationExpr, parameter: Parameter) {
+    if (containsOnlyNameOrValue(annotationExpr.pairs)) {
+        replacePathVariableWithMarkerAnnotation(parameter)
+        return
+    }
+
     annotationExpr.pairs
             .filter { isSamePathVariableName(it, parameter) }
             .forEach { it.remove() }
 }
+
+private fun replacePathVariableWithMarkerAnnotation(parameter: Parameter) {
+    parameter.annotations
+            .first { isPathVariableAnnotation(it) }
+            .remove()
+
+    parameter.addMarkerAnnotation(PATH_VARIABLE)
+}
+
+private fun containsOnlyNameOrValue(pairs: List<MemberValuePair>) = pairs.any { isNameOrValue(it) } && pairs.size == 1
+private fun isNameOrValue(it: MemberValuePair) = it.name == SimpleName("name") || it.name == SimpleName("value")
 
 private fun isSamePathVariableName(it: MemberValuePair, parameter: Parameter) =
         it == MemberValuePair("value", StringLiteralExpr(parameter.name.identifier))
