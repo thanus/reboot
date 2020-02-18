@@ -1,0 +1,11 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.{kt, kts}]
+indent_size = 4
+continuation_indent_size = 8
+indent_style = space
+disabled_rules = import-ordering
