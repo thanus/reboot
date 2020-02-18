@@ -1,9 +1,4 @@
 language: java
 
-branches:
-  only:
-    - master
-    - reboot-v2
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
