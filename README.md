@@ -1,5 +1,7 @@
 # ReBoot
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f1d8367707be4b9193dc8b3dadd0bc6b)](https://app.codacy.com/manual/tthanusijan/reboot?utm_source=github.com&utm_medium=referral&utm_content=thanus/reboot&utm_campaign=Badge_Grade_Dashboard)
+
 A refactoring tool to automatically apply best practices in Java / Spring-Boot applications.
 ReBoot performs the following refactorings on a project:
 
