@@ -39,7 +39,7 @@ private fun rewriteNormalPathVariable(annotationExpr: NormalAnnotationExpr, para
     }
 
     annotationExpr.pairs
-            .filter { isSamePathVariableName(it, parameter) }
+            .filter { isPathVariableSameAsVariableName(it, parameter) }
             .forEach { it.remove() }
 }
 
@@ -54,7 +54,11 @@ private fun replacePathVariableWithMarkerAnnotation(parameter: Parameter) {
 private fun containsOnlyNameOrValue(pairs: List<MemberValuePair>) = pairs.any { isNameOrValue(it) } && pairs.size == 1
 private fun isNameOrValue(it: MemberValuePair) = it.name == SimpleName("name") || it.name == SimpleName("value")
 
-private fun isSamePathVariableName(it: MemberValuePair, parameter: Parameter) =
-        it == MemberValuePair("value", StringLiteralExpr(parameter.name.identifier))
+private fun isPathVariableSameAsVariableName(pair: MemberValuePair, parameter: Parameter) =
+        when (pair.name) {
+            SimpleName("value") -> pair == MemberValuePair(pair.name, StringLiteralExpr(parameter.name.identifier))
+            SimpleName("name") -> pair == MemberValuePair(pair.name, StringLiteralExpr(parameter.name.identifier))
+            else -> false
+        }
 
 private fun isPathVariableAnnotation(annotation: AnnotationExpr) = annotation.name == Name(PATH_VARIABLE)

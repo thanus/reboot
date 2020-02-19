@@ -33,6 +33,30 @@ internal class PathVariableKtTest : ReBootBase() {
         assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
     }
 
+    @Test
+    fun `PathVariable value should be explicit when it is not the same as variable name`() {
+        val code = """
+            public class UsersController {
+                public ResponseEntity<User> getUser(@PathVariable("userId") Long id) {
+                    return ResponseEntity.ok().build();
+                }
+            }
+        """.trimIndent()
+        val compilationUnit = StaticJavaParser.parse(code)
+
+        rewritePathVariable(compilationUnit)
+
+        val expectedCode = """
+            public class UsersController {
+                public ResponseEntity<User> getUser(@PathVariable("userId") Long id) {
+                    return ResponseEntity.ok().build();
+                }
+            }
+        """.trimIndent()
+
+        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+    }
+
     @ParameterizedTest
     @ValueSource(strings = ["name", "value"])
     fun `PathVariable with explicit value which is the same as variable name should be implicit`(input: String) {
@@ -82,11 +106,12 @@ internal class PathVariableKtTest : ReBootBase() {
         assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
     }
 
-    @Test
-    fun `PathVariable containing multiple values with same variable name should be implicit`() {
+    @ParameterizedTest
+    @ValueSource(strings = ["value", "name"])
+    fun `PathVariable containing multiple values with same variable name should be implicit`(input: String) {
         val code = """
             public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable(value = "id", required = true) Long id) {
+                public ResponseEntity<User> getUser(@PathVariable($input = "id", required = true) Long id) {
                     return ResponseEntity.ok().build();
                 }
             }
