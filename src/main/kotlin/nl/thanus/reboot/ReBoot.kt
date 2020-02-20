@@ -7,8 +7,8 @@ import com.github.javaparser.utils.SourceRoot
 import mu.KotlinLogging
 import nl.thanus.reboot.refactoring.rewriteAutowiredFieldInjections
 import nl.thanus.reboot.refactoring.rewriteMockitoFieldInjections
-import nl.thanus.reboot.refactoring.rewritePathVariable
 import nl.thanus.reboot.refactoring.rewriteRequestMappings
+import nl.thanus.reboot.refactoring.rewriteWebAnnotations
 import java.nio.file.Paths
 
 val logger = KotlinLogging.logger { }
@@ -44,7 +44,7 @@ private fun reboot(compilationUnit: CompilationUnit) {
         rewriteAutowiredFieldInjections(compilationUnit)
         rewriteMockitoFieldInjections(compilationUnit)
         rewriteRequestMappings(compilationUnit)
-        rewritePathVariable(compilationUnit)
+        rewriteWebAnnotations(compilationUnit)
     } catch (e: UnsupportedOperationException) {
         compilationUnit.storage.ifPresent {
             logger.warn { "Lexical preserving failed on ${it.directory}/${it.fileName}" }
