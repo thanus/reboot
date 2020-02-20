@@ -37,12 +37,12 @@ private fun addConstructor(compilationUnit: CompilationUnit) {
 
 private fun hasConstructor(compilationUnit: CompilationUnit): Boolean {
     val hasAllArgsConstructor = compilationUnit.findAll(AnnotationExpr::class.java)
-            .any { !isAllArgsConstructor(it) }
+            .any { isAllArgsConstructor(it) }
 
     val hasConstructor = compilationUnit.findAll(ClassOrInterfaceDeclaration::class.java)
             .any { it.constructors.isNotEmpty() }
 
-    return hasAllArgsConstructor && hasConstructor
+    return hasAllArgsConstructor || hasConstructor
 }
 
 private fun isTest(compilationUnit: CompilationUnit) =

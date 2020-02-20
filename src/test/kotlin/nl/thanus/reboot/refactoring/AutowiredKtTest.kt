@@ -109,4 +109,33 @@ internal class AutowiredKtTest : ReBootBase() {
 
         assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
     }
+
+    @Test
+    fun `Should not add constructor when class has a constructor with lombok`() {
+        val code = """
+            import org.springframework.beans.factory.annotation.Autowired;
+            import lombok.AllArgsConstructor;
+            
+            @AllArgsConstructor(onConstructor = @__(@Autowired))
+            public class UsersController {
+                private final UsersService usersService;
+            }
+        """.trimIndent()
+
+        val compilationUnit = StaticJavaParser.parse(code)
+
+        rewriteAutowiredFieldInjections(compilationUnit)
+
+        val expectedCode = """
+            import org.springframework.beans.factory.annotation.Autowired;
+            import lombok.AllArgsConstructor;
+            
+            @AllArgsConstructor(onConstructor = @__(@Autowired))
+            public class UsersController {
+                private final UsersService usersService;
+            }
+        """.trimIndent()
+
+        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+    }
 }
