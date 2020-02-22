@@ -1,13 +1,13 @@
 package nl.thanus.reboot.refactoring
 
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter
 import com.github.javaparser.StaticJavaParser
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
-import org.junit.jupiter.api.Test
 import java.util.stream.Stream
 
 internal class RequestMappingKtTest : ReBootBase() {
@@ -39,14 +39,32 @@ internal class RequestMappingKtTest : ReBootBase() {
         assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
     }
 
-    private fun requestMappings(): Stream<Arguments> =
-            Stream.of(
-                    Arguments.of("GET", "@GetMapping"),
-                    Arguments.of("POST", "@PostMapping"),
-                    Arguments.of("PUT", "@PutMapping"),
-                    Arguments.of("PATCH", "@PatchMapping"),
-                    Arguments.of("DELETE", "@DeleteMapping")
-            )
+    @ParameterizedTest
+    @MethodSource("requestMappings")
+    fun `@RequestMapping with only static RequestMethod should be changed to Marker Mapping Annotation`(method: String, mappingAnnotation: String) {
+        val code = """
+            public class UsersController {
+                @RequestMapping(method = $method)
+                public ResponseEntity<List<User>> getUsers() {
+                    return ResponseEntity.ok().build();
+                }
+            }
+        """.trimIndent()
+        val compilationUnit = StaticJavaParser.parse(code)
+
+        rewriteRequestMappings(compilationUnit)
+
+        val expectedCode = """
+            public class UsersController {
+                $mappingAnnotation
+                public ResponseEntity<List<User>> getUsers() {
+                    return ResponseEntity.ok().build();
+                }
+            }
+        """.trimIndent()
+
+        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+    }
 
     @ParameterizedTest
     @ValueSource(strings = ["path", "value"])
@@ -100,4 +118,39 @@ internal class RequestMappingKtTest : ReBootBase() {
 
         assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
     }
+
+    @Test
+    fun `@RequestMapping should not change when method has an unknown RequestMethod expression`() {
+        val code = """
+            public class UsersController {
+                @RequestMapping(method = 5)
+                public ResponseEntity<User> getUser() {
+                    return ResponseEntity.ok().build();
+                }
+            }
+        """.trimIndent()
+        val compilationUnit = StaticJavaParser.parse(code)
+
+        rewriteRequestMappings(compilationUnit)
+
+        val expectedCode = """
+            public class UsersController {
+                @RequestMapping(method = 5)
+                public ResponseEntity<User> getUser() {
+                    return ResponseEntity.ok().build();
+                }
+            }
+        """.trimIndent()
+
+        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+    }
+
+    private fun requestMappings(): Stream<Arguments> =
+            Stream.of(
+                    Arguments.of("GET", "@GetMapping"),
+                    Arguments.of("POST", "@PostMapping"),
+                    Arguments.of("PUT", "@PutMapping"),
+                    Arguments.of("PATCH", "@PatchMapping"),
+                    Arguments.of("DELETE", "@DeleteMapping")
+            )
 }

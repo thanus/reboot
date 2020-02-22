@@ -11,8 +11,9 @@ import com.github.javaparser.ast.expr.NameExpr
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
 import com.github.javaparser.ast.expr.SimpleName
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
+import mu.KotlinLogging
 
-private const val REQUEST_METHOD = "RequestMethod"
+val logger = KotlinLogging.logger { }
 
 fun rewriteRequestMappings(compilationUnit: CompilationUnit) {
     compilationUnit.findAll(MethodDeclaration::class.java)
@@ -24,16 +25,21 @@ private fun rewriteRequestMappingAnnotations(method: MethodDeclaration) {
     val requestMappingAnnotation = method.annotations.first { isRequestMapping(it) } as NormalAnnotationExpr
     val pairs = requestMappingAnnotation.pairs
 
-    val requestMethod = pairs.filter { it.value.isFieldAccessExpr }
-            .map { it.value as FieldAccessExpr }
-            .first { it.scope == NameExpr(REQUEST_METHOD) }
+    val requestMethod: SimpleName? = when (val value = pairs.first { it.name == SimpleName("method") }.value) {
+        is NameExpr -> value.name
+        is FieldAccessExpr -> value.name
+        else -> {
+            logger.warn { "Unknown RequestMethod expression: $requestMappingAnnotation" }
+            null
+        }
+    }
 
     when (requestMethod) {
-        FieldAccessExpr(NameExpr(REQUEST_METHOD), "GET") -> rewriteRequestMapping(method, pairs, "GetMapping")
-        FieldAccessExpr(NameExpr(REQUEST_METHOD), "POST") -> rewriteRequestMapping(method, pairs, "PostMapping")
-        FieldAccessExpr(NameExpr(REQUEST_METHOD), "PUT") -> rewriteRequestMapping(method, pairs, "PutMapping")
-        FieldAccessExpr(NameExpr(REQUEST_METHOD), "PATCH") -> rewriteRequestMapping(method, pairs, "PatchMapping")
-        FieldAccessExpr(NameExpr(REQUEST_METHOD), "DELETE") -> rewriteRequestMapping(method, pairs, "DeleteMapping")
+        SimpleName("GET") -> rewriteRequestMapping(method, pairs, "GetMapping")
+        SimpleName("POST") -> rewriteRequestMapping(method, pairs, "PostMapping")
+        SimpleName("PUT") -> rewriteRequestMapping(method, pairs, "PutMapping")
+        SimpleName("PATCH") -> rewriteRequestMapping(method, pairs, "PatchMapping")
+        SimpleName("DELETE") -> rewriteRequestMapping(method, pairs, "DeleteMapping")
     }
 }
 
