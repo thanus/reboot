@@ -18,23 +18,23 @@ internal class WebAnnotationKtTest : ReBootBase() {
         @EnumSource(WebAnnotation::class)
         fun `WebAnnotation with explicit value which is the same as variable name should be implicit`(annotation: WebAnnotation) {
             val code = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@$annotation("id") Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@$annotation("id") Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
             val compilationUnit = StaticJavaParser.parse(code)
 
             rewriteWebAnnotations(compilationUnit)
 
             val expectedCode = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@$annotation Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@$annotation Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
 
             assertRefactored(compilationUnit, expectedCode)
         }
@@ -42,23 +42,23 @@ internal class WebAnnotationKtTest : ReBootBase() {
         @Test
         fun `PathVariable value should be explicit when it is not the same as variable name`() {
             val code = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable("userId") Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@PathVariable("userId") Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
             val compilationUnit = StaticJavaParser.parse(code)
 
             rewriteWebAnnotations(compilationUnit)
 
             val expectedCode = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable("userId") Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@PathVariable("userId") Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
 
             assertRefactored(compilationUnit, expectedCode)
         }
@@ -72,23 +72,23 @@ internal class WebAnnotationKtTest : ReBootBase() {
         @EnumSource(WebAnnotation::class)
         fun `WebAnnotation with explicit value which is the same as variable name should be implicit`(annotation: WebAnnotation) {
             val code = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@$annotation(value = "id") Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@$annotation(value = "id") Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
             val compilationUnit = StaticJavaParser.parse(code)
 
             rewriteWebAnnotations(compilationUnit)
 
             val expectedCode = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@$annotation Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@$annotation Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
 
             assertRefactored(compilationUnit, expectedCode)
         }
@@ -97,48 +97,23 @@ internal class WebAnnotationKtTest : ReBootBase() {
         @EnumSource(WebAnnotation::class)
         fun `WebAnnotation with explicit name which is the same as variable name should be implicit`(annotation: WebAnnotation) {
             val code = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@$annotation(name = "id") Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@$annotation(name = "id") Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
             val compilationUnit = StaticJavaParser.parse(code)
 
             rewriteWebAnnotations(compilationUnit)
 
             val expectedCode = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@$annotation Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@$annotation Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
-
-            assertRefactored(compilationUnit, expectedCode)
-        }
-
-        @ParameterizedTest
-        @EnumSource(WebAnnotation::class)
-        fun `WebAnnotation with no value or name should not be changed`(annotation: WebAnnotation) {
-            val code = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@$annotation(required = false) Long id) {
-                    return ResponseEntity.ok().build();
-                }
-            }
-        """.trimIndent()
-            val compilationUnit = StaticJavaParser.parse(code)
-
-            rewriteWebAnnotations(compilationUnit)
-
-            val expectedCode = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@$annotation(required = false) Long id) {
-                    return ResponseEntity.ok().build();
-                }
-            }
-        """.trimIndent()
+            """.trimIndent()
 
             assertRefactored(compilationUnit, expectedCode)
         }
@@ -147,73 +122,126 @@ internal class WebAnnotationKtTest : ReBootBase() {
         @ValueSource(strings = ["value", "name"])
         fun `PathVariable value should be explicit when it is not the same as variable name`(input: String) {
             val code = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable($input = "userId") Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@PathVariable($input = "userId") Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
             val compilationUnit = StaticJavaParser.parse(code)
 
             rewriteWebAnnotations(compilationUnit)
 
             val expectedCode = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable($input = "userId") Long id) {
-                    return ResponseEntity.ok().build();
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@PathVariable($input = "userId") Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
 
             assertRefactored(compilationUnit, expectedCode)
         }
 
-        @Test
-        fun `PathVariable values with same variable name should be implicit`() {
-            val code = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable(name = "id", required = true) Long id) {
-                    return ResponseEntity.ok().build();
-                }
+        @Nested
+        @DisplayName("Required WebAnnotation")
+        inner class RequiredField {
+
+            @Test
+            fun `Required PathVariable should be implicit`() {
+                val code = """
+                    public class UsersController {
+                        public ResponseEntity<User> getUser(@PathVariable(required = true) Long id) {
+                            return ResponseEntity.ok().build();
+                        }
+                    }
+                """.trimIndent()
+                val compilationUnit = StaticJavaParser.parse(code)
+
+                rewriteWebAnnotations(compilationUnit)
+
+                val expectedCode = """
+                    public class UsersController {
+                        public ResponseEntity<User> getUser(@PathVariable Long id) {
+                            return ResponseEntity.ok().build();
+                        }
+                    }
+                """.trimIndent()
+
+                assertRefactored(compilationUnit, expectedCode)
             }
-        """.trimIndent()
-            val compilationUnit = StaticJavaParser.parse(code)
 
-            rewriteWebAnnotations(compilationUnit)
+            @Test
+            fun `Required PathVariable with same variable name should be implicit`() {
+                val code = """
+                    public class UsersController {
+                        public ResponseEntity<User> getUser(@PathVariable(name = "id", required = true) Long id) {
+                            return ResponseEntity.ok().build();
+                        }
+                    }
+                """.trimIndent()
+                val compilationUnit = StaticJavaParser.parse(code)
 
-            val expectedCode = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable(required = true) Long id) {
-                    return ResponseEntity.ok().build();
-                }
+                rewriteWebAnnotations(compilationUnit)
+
+                val expectedCode = """
+                    public class UsersController {
+                        public ResponseEntity<User> getUser(@PathVariable Long id) {
+                            return ResponseEntity.ok().build();
+                        }
+                    }
+                """.trimIndent()
+
+                assertRefactored(compilationUnit, expectedCode)
             }
-        """.trimIndent()
 
-            assertRefactored(compilationUnit, expectedCode)
-        }
+            @Test
+            fun `Optional PathVariable with no value or name should not be changed`() {
+                val code = """
+                    public class UsersController {
+                        public ResponseEntity<User> getUser(@PathVariable(required = false) Long id) {
+                            return ResponseEntity.ok().build();
+                        }
+                    }
+                """.trimIndent()
+                val compilationUnit = StaticJavaParser.parse(code)
 
-        @Test
-        fun `PathVariable values should be explicit when it is not the same as variable name`() {
-            val code = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable(name = "userId", required = false) Long id) {
-                    return ResponseEntity.ok().build();
-                }
+                rewriteWebAnnotations(compilationUnit)
+
+                val expectedCode = """
+                    public class UsersController {
+                        public ResponseEntity<User> getUser(@PathVariable(required = false) Long id) {
+                            return ResponseEntity.ok().build();
+                        }
+                    }
+                """.trimIndent()
+
+                assertRefactored(compilationUnit, expectedCode)
             }
-        """.trimIndent()
-            val compilationUnit = StaticJavaParser.parse(code)
 
-            rewriteWebAnnotations(compilationUnit)
-
-            val expectedCode = """
-            public class UsersController {
-                public ResponseEntity<User> getUser(@PathVariable(name = "userId", required = false) Long id) {
-                    return ResponseEntity.ok().build();
+            @Test
+            fun `Optional PathVariable values should be explicit when it is not the same as variable name`() {
+                val code = """
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@PathVariable(name = "userId", required = false) Long id) {
+                        return ResponseEntity.ok().build();
+                    }
                 }
-            }
-        """.trimIndent()
+            """.trimIndent()
+                val compilationUnit = StaticJavaParser.parse(code)
 
-            assertRefactored(compilationUnit, expectedCode)
+                rewriteWebAnnotations(compilationUnit)
+
+                val expectedCode = """
+                public class UsersController {
+                    public ResponseEntity<User> getUser(@PathVariable(name = "userId", required = false) Long id) {
+                        return ResponseEntity.ok().build();
+                    }
+                }
+            """.trimIndent()
+
+                assertRefactored(compilationUnit, expectedCode)
+            }
         }
     }
 

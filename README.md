@@ -8,7 +8,8 @@ A refactoring tool to automatically apply best practices in Java / Spring-Boot a
 ReBoot performs the following refactorings on a project:
 
 *   [Request Mapping](#request-mapping)
-*   [Explicit web annotations (PathVariable, RequestParam, RequestHeader, etc)](#explicit-web-annotations)
+*   [Explicit web annotation value (PathVariable, RequestParam, RequestHeader, etc)](#explicit-web-annotation)
+*   [Explicit mandatory web annotation (PathVariable, RequestParam, RequestHeader, etc)](#explicit-mandatory-web-annotation)
 *   [Field injection with Spring Autowired](#field-injection-with-spring-autowired)
 *   [Field injection with Mockito](#field-injection-with-mockito)
 
@@ -54,7 +55,7 @@ public class UsersController {
 }
 ```
 
-### Explicit web annotations
+### Explicit web annotation
 
 This refactoring is applied to [PathVariable](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PathVariable.html), 
 [RequestParam](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html), 
@@ -73,6 +74,43 @@ Before ([Full source](examples/users/src/main/java/nl/thanus/demo/controllers/Us
 public class UsersController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+        // code
+    }
+}
+```
+
+After
+
+```java
+@RestController
+@RequestMapping("/users")
+public class UsersController {
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        // code
+    }
+}
+```
+
+### Explicit mandatory web annotation
+
+This refactoring is applied to [PathVariable](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PathVariable.html), 
+[RequestParam](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html), 
+[RequestHeader](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestHeader.html), 
+[RequestAttribute](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestAttribute.html), 
+[CookieValue](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CookieValue.html), 
+[ModelAttribute](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/ModelAttribute.html), 
+[SessionAttribute](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/SessionAttribute.html).
+For example, for `@PathVariable`:
+
+Before ([Full source](examples/users/src/main/java/nl/thanus/demo/controllers/UsersController.java))
+
+```java
+@RestController
+@RequestMapping("/users")
+public class UsersController {
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable(required = true) Long id) {
         // code
     }
 }

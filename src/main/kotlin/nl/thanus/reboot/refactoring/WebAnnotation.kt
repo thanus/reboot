@@ -3,6 +3,7 @@ package nl.thanus.reboot.refactoring
 import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
+import com.github.javaparser.ast.expr.BooleanLiteralExpr
 import com.github.javaparser.ast.expr.MemberValuePair
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
 import com.github.javaparser.ast.expr.SimpleName
@@ -41,14 +42,14 @@ private fun rewriteSingleWebAnnotation(annotationExpr: SingleMemberAnnotationExp
 }
 
 private fun rewriteNormalWebAnnotation(annotationExpr: NormalAnnotationExpr, parameter: Parameter) {
-    if (containsOnlySameWebAnnotationAsVariableName(annotationExpr.pairs, parameter)) {
+    val pairs = annotationExpr.pairs.filterNot { it == MemberValuePair("required", BooleanLiteralExpr(true)) }
+
+    if (pairs.isEmpty() || containsOnlySameWebAnnotationAsVariableName(pairs, parameter)) {
         replaceWebAnnotationWithMarkerAnnotation(parameter)
         return
     }
 
-    annotationExpr.pairs
-            .filter { isWebAnnotationSameAsVariableName(it, parameter) }
-            .forEach { it.remove() }
+    pairs.filter { isWebAnnotationSameAsVariableName(it, parameter) }.forEach { it.remove() }
 }
 
 private fun replaceWebAnnotationWithMarkerAnnotation(parameter: Parameter) {
@@ -59,7 +60,7 @@ private fun replaceWebAnnotationWithMarkerAnnotation(parameter: Parameter) {
 }
 
 private fun containsOnlySameWebAnnotationAsVariableName(pairs: List<MemberValuePair>, parameter: Parameter) =
-    pairs.any { isWebAnnotationSameAsVariableName(it, parameter) } && pairs.size == 1
+        pairs.any { isWebAnnotationSameAsVariableName(it, parameter) } && pairs.size == 1
 
 private fun isWebAnnotationSameAsVariableName(pair: MemberValuePair, parameter: Parameter) =
         when (pair.name) {
