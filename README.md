@@ -19,36 +19,25 @@ The initial version of ReBoot was written in [Rascal](https://www.rascal-mpl.org
 
 ### Request Mapping
 
-Before ([Full source](examples/users/src/main/java/nl/thanus/demo/controllers/UsersController.java))
+Spring provides HTTP method specific [shortcut variants](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping)
+for `@RequestMapping`. These custom annotations (`@GetMapping`, `@PostMapping`, etc) are less verbose and more
+expressive than `@RequestMapping`. This refactoring is also applied to projects using [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign),
+as they also reuse Spring annotations.
 
-```java
+#### Refactoring diff
+
+```diff
 @RestController
 @RequestMapping("/users")
 public class UsersController {
-    @RequestMapping(method = RequestMethod.GET)
+-   @RequestMapping(method = RequestMethod.GET)
++   @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         // code
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
-        // code
-    }
-}
-```
-
-After
-
-```java
-@RestController
-@RequestMapping("/users")
-public class UsersController {
-    @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        // code
-    }
-
-    @GetMapping("/{id}")
+-   @RequestMapping(path = "/{id}", method = RequestMethod.GET)
++   @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
         // code
     }
@@ -57,8 +46,11 @@ public class UsersController {
 
 ### Explicit web annotation
 
-This refactoring is applied to [PathVariable](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PathVariable.html), 
-[RequestParam](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html), 
+URI Variables can be named [explicitly](https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-requestmapping-uri-templates),
+like `@PathVariable("id") Long id`, but this is redundant. This detail can be left out if the names are the same. This
+refactoring is also applied to projects using [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign),
+as they also reuse Spring annotations. This refactoring is not only applicable for [PathVariable](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PathVariable.html)
+but also [RequestParam](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html), 
 [RequestHeader](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestHeader.html), 
 [RequestAttribute](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestAttribute.html), 
 [CookieValue](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CookieValue.html), 
@@ -66,27 +58,15 @@ This refactoring is applied to [PathVariable](https://docs.spring.io/spring-fram
 [SessionAttribute](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/SessionAttribute.html).
 For example, for `@PathVariable`:
 
-Before ([Full source](examples/users/src/main/java/nl/thanus/demo/controllers/UsersController.java))
+#### Refactoring diff
 
-```java
+```diff
 @RestController
 @RequestMapping("/users")
 public class UsersController {
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
-        // code
-    }
-}
-```
-
-After
-
-```java
-@RestController
-@RequestMapping("/users")
-public class UsersController {
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+-   public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
++   public ResponseEntity<User> getUser(@PathVariable Long id) {
         // code
     }
 }
@@ -94,8 +74,10 @@ public class UsersController {
 
 ### Explicit mandatory web annotation
 
-This refactoring is applied to [PathVariable](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PathVariable.html), 
-[RequestParam](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html), 
+The attribute `required` set to true on annotations like `@PathVariable` is not necessary as this is default already. 
+This refactoring is also applied to projects using [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign),
+as they also reuse Spring annotations. This refactoring is not only applicable for [PathVariable](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/PathVariable.html)
+but also [RequestParam](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestParam.html), 
 [RequestHeader](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestHeader.html), 
 [RequestAttribute](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestAttribute.html), 
 [CookieValue](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CookieValue.html), 
@@ -103,27 +85,15 @@ This refactoring is applied to [PathVariable](https://docs.spring.io/spring-fram
 [SessionAttribute](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/SessionAttribute.html).
 For example, for `@PathVariable`:
 
-Before ([Full source](examples/users/src/main/java/nl/thanus/demo/controllers/UsersController.java))
+#### Refactoring diff
 
-```java
+```diff
 @RestController
 @RequestMapping("/users")
 public class UsersController {
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable(required = true) Long id) {
-        // code
-    }
-}
-```
-
-After
-
-```java
-@RestController
-@RequestMapping("/users")
-public class UsersController {
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+-   public ResponseEntity<User> getUser(@PathVariable(required = true) Long id) {
++   public ResponseEntity<User> getUser(@PathVariable Long id) {
         // code
     }
 }
@@ -131,55 +101,44 @@ public class UsersController {
 
 ### Field injection with Spring Autowired
 
-Before ([Full source](examples/users/src/main/java/nl/thanus/demo/controllers/UsersController.java))
+Dependency injection with field injection is not recommended. Instead, constructor injection should be used, leading
+to safer code and easier to test. This is explained in more detail in article [why-field-injection-is-evil](http://olivergierke.de/2013/11/why-field-injection-is-evil/).
 
-```java
+#### Refactoring diff
+
+```diff
++@AllArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UsersController {
-    @Autowired
-    private UsersService usersService;
-    @Autowired
-    private UsernameService usernameService;
-}
-```
-
-After
-
-```java
-@AllArgsConstructor
-@RestController
-@RequestMapping("/users")
-public class UsersController {
-    private final UsersService usersService;
-    private final UsernameService usernameService;
+-   @Autowired
+-   private UsersService usersService;
+-   @Autowired
+-   private UsernameService usernameService;
++   private final UsersService usersService;
++   private final UsernameService usernameService;
 }
 ```
 
 ### Field injection with Mockito
 
-Before ([Full source](examples/users/src/test/java/nl/thanus/demo/controllers/UsersControllerTest.java))
+Just like the above refactoring, it is not recommended to do field injection with Mockito for the same reasons.
+This is explained in more detail in article [Mockito: Why You Should Not Use InjectMocks Annotation to Autowire Fields](https://tedvinke.wordpress.com/2014/02/13/mockito-why-you-should-not-use-injectmocks-annotation-to-autowire-fields/).
 
-```java
+#### Refactoring diff
+
+```diff
 @ExtendWith(value = MockitoExtension.class)
 class UsersControllerTest {
-    @Mock
-    private UsersService usersService;
-    @Mock
-    private UsernameService usernameService;
-    @InjectMocks
-    private UsersController usersController;
-}
-```
-
-After
-
-```java
-@ExtendWith(value = MockitoExtension.class)
-class UsersControllerTest {
-    private UsersService usersService = Mockito.mock(UsersService.class);
-    private UsernameService usernameService = Mockito.mock(UsernameService.class);
-    private UsersController usersController = new UsersController();
+-   @Mock
+-   private UsersService usersService;
+-   @Mock
+-   private UsernameService usernameService;
+-   @InjectMocks
+-   private UsersController usersController;
++   private UsersService usersService = Mockito.mock(UsersService.class);
++   private UsernameService usernameService = Mockito.mock(UsernameService.class);
++   private UsersController usersController = new UsersController();
 }
 ```
 
@@ -201,3 +160,6 @@ After cloning the project, you can build it from source with:
 ```shell script
 java -jar target/reboot-1.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
 ```
+
+## Contributions are welcome!
+Feel free to suggest and implement improvements.
