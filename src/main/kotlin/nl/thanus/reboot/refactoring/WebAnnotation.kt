@@ -41,7 +41,7 @@ private fun rewriteSingleWebAnnotation(annotationExpr: SingleMemberAnnotationExp
 }
 
 private fun rewriteNormalWebAnnotation(annotationExpr: NormalAnnotationExpr, parameter: Parameter) {
-    if (containsOnlyNameOrValue(annotationExpr.pairs)) {
+    if (containsOnlySameWebAnnotationAsVariableName(annotationExpr.pairs, parameter)) {
         replaceWebAnnotationWithMarkerAnnotation(parameter)
         return
     }
@@ -58,9 +58,8 @@ private fun replaceWebAnnotationWithMarkerAnnotation(parameter: Parameter) {
     parameter.addMarkerAnnotation(annotation.name.identifier)
 }
 
-private fun containsOnlyNameOrValue(pairs: List<MemberValuePair>) = pairs.any { isNameOrValue(it) } && pairs.size == 1
-
-private fun isNameOrValue(it: MemberValuePair) = it.name == SimpleName(NAME) || it.name == SimpleName(VALUE)
+private fun containsOnlySameWebAnnotationAsVariableName(pairs: List<MemberValuePair>, parameter: Parameter) =
+    pairs.any { isWebAnnotationSameAsVariableName(it, parameter) } && pairs.size == 1
 
 private fun isWebAnnotationSameAsVariableName(pair: MemberValuePair, parameter: Parameter) =
         when (pair.name) {
