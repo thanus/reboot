@@ -1,8 +1,6 @@
 package nl.thanus.reboot.refactoring
 
 import com.github.javaparser.StaticJavaParser
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -38,7 +36,7 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-            assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+            assertRefactored(compilationUnit, expectedCode)
         }
 
         @Test
@@ -62,7 +60,7 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-            assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+            assertRefactored(compilationUnit, expectedCode)
         }
     }
 
@@ -92,7 +90,7 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-            assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+            assertRefactored(compilationUnit, expectedCode)
         }
 
         @ParameterizedTest
@@ -117,7 +115,7 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-            assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+            assertRefactored(compilationUnit, expectedCode)
         }
 
         @ParameterizedTest
@@ -142,7 +140,7 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-            assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+            assertRefactored(compilationUnit, expectedCode)
         }
 
         @ParameterizedTest
@@ -167,7 +165,7 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-            assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+            assertRefactored(compilationUnit, expectedCode)
         }
 
         @Test
@@ -191,7 +189,7 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-            assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+            assertRefactored(compilationUnit, expectedCode)
         }
 
         @Test
@@ -215,7 +213,7 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-            assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+            assertRefactored(compilationUnit, expectedCode)
         }
     }
 
@@ -240,6 +238,6 @@ internal class WebAnnotationKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+        assertRefactored(compilationUnit, expectedCode)
     }
 }

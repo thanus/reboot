@@ -1,8 +1,6 @@
 package nl.thanus.reboot.refactoring
 
 import com.github.javaparser.StaticJavaParser
-import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class AutowiredKtTest : ReBootBase() {
@@ -31,7 +29,7 @@ internal class AutowiredKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+        assertRefactored(compilationUnit, expectedCode)
     }
 
     @Test
@@ -70,7 +68,7 @@ internal class AutowiredKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+        assertRefactored(compilationUnit, expectedCode)
     }
 
     @Test
@@ -107,7 +105,7 @@ internal class AutowiredKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+        assertRefactored(compilationUnit, expectedCode)
     }
 
     @Test
@@ -136,6 +134,6 @@ internal class AutowiredKtTest : ReBootBase() {
             }
         """.trimIndent()
 
-        assertThat(LexicalPreservingPrinter.print(compilationUnit)).isEqualTo(expectedCode)
+        assertRefactored(compilationUnit, expectedCode)
     }
 }
