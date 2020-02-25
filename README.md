@@ -149,16 +149,57 @@ This can easily be done manually, of course it is better if it is automated.
 
 ### Building from source
 
-After cloning the project, you can build it from source with:
+ReBoot artifacts aren't published to Maven Central yet. After cloning the project, you can build it from source with:
 
 ```shell script
 ./mvnw clean install
 ```
 
-### Running ReBoot
+### Running ReBoot jar
 
 ```shell script
-java -jar target/reboot-1.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
+cd reboot-core
+java -jar target/reboot-core-1.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
+```
+
+### Running reboot-maven-plugin
+
+Add reboot-maven-plugin to your POM:
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>nl.thanus</groupId>
+            <artifactId>reboot-maven-plugin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </plugin>
+    </plugins>
+</build>
+```
+
+By default, reboot-maven-plugin uses `${project.basedir}` as path to refactor. If you want to specify another path, you
+can use the property `directory`:
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>nl.thanus</groupId>
+            <artifactId>reboot-maven-plugin</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <configuration>
+                <directory>/path/to/project</directory>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+Run plugin:
+
+```shell script
+mvn nl.thanus:reboot-maven-plugin:1.0-SNAPSHOT:reboot
 ```
 
 ## Contributions are welcome!
