@@ -1,7 +1,6 @@
 package nl.thanus.reboot.refactoring
 
 import com.github.javaparser.ast.CompilationUnit
-import com.github.javaparser.ast.ImportDeclaration
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.expr.AnnotationExpr
@@ -56,12 +55,7 @@ private fun containsAutowiredAnnotation(fieldDeclaration: FieldDeclaration) =
 private fun isAutowiredAnnotation(annotationExpr: AnnotationExpr) = annotationExpr.name == Name("Autowired")
 
 private fun removeAutowiredOnFieldAndMakeFinal(fieldDeclaration: FieldDeclaration) {
-    fieldDeclaration.findAncestor(CompilationUnit::class.java).ifPresent { compilationUnit ->
-        compilationUnit.imports
-                .firstOrNull {
-                    it == ImportDeclaration("org.springframework.beans.factory.annotation.Autowired", false, false)
-                }?.remove()
-    }
+    fieldDeclaration.tryRemoveImportFromCompilationUnit("org.springframework.beans.factory.annotation.Autowired")
 
     fieldDeclaration.annotations
             .first { isAutowiredAnnotation(it) }

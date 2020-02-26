@@ -2,6 +2,7 @@ package nl.thanus.reboot.refactoring
 
 import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.NodeList
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.FieldAccessExpr
@@ -47,6 +48,7 @@ private fun containsRequestMappingAnnotation(method: MethodDeclaration) = method
 
 private fun rewriteRequestMapping(method: MethodDeclaration, pairs: NodeList<MemberValuePair>, annotation: String) {
     method.annotations.first { isRequestMapping(it) }.remove()
+    optimizeImports(method, annotation)
 
     if (pairs.size == 1) {
         method.addMarkerAnnotation(annotation)
@@ -71,3 +73,20 @@ private fun getPairsWithoutRequestMethod(pairs: NodeList<MemberValuePair>) =
 
 private fun containsOnlyPathOrValue(pairs: List<MemberValuePair>) = pairs.any { isPathOrValue(it) } && pairs.size == 1
 private fun isPathOrValue(it: MemberValuePair) = it.name == SimpleName("path") || it.name == SimpleName("value")
+
+private fun optimizeImports(method: MethodDeclaration, annotation: String) {
+    method.tryAddImportToCompilationUnit("org.springframework.web.bind.annotation.$annotation")
+
+    val requestMethod = annotation.substring(0, annotation.length - 7).toUpperCase()
+    method.tryRemoveImportFromCompilationUnit("org.springframework.web.bind.annotation.RequestMethod")
+    method.tryRemoveImportFromCompilationUnit("org.springframework.web.bind.annotation.RequestMethod.$requestMethod", true)
+
+    val sharedRequestMapping = method.findAncestor(ClassOrInterfaceDeclaration::class.java)
+            .map { it.annotations }
+            .orElse(NodeList(emptyList<AnnotationExpr>()))
+            .any { isRequestMapping(it) }
+
+    if (!sharedRequestMapping) {
+        method.tryRemoveImportFromCompilationUnit("org.springframework.web.bind.annotation.RequestMapping")
+    }
+}

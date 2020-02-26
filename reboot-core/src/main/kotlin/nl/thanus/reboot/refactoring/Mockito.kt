@@ -99,7 +99,7 @@ private fun instantiateObject(fieldDeclaration: FieldDeclaration): NodeList<Vari
 }
 
 private fun addMockitoImportToCompilationUnit(fieldDeclaration: FieldDeclaration) =
-        fieldDeclaration.findAncestor(CompilationUnit::class.java).ifPresent { it.addImport("org.mockito.Mockito") }
+        fieldDeclaration.tryAddImportToCompilationUnit("org.mockito.Mockito")
 
 private fun isMockitoAnnotation(annotation: AnnotationExpr) =
         setOf(Name(INJECT_MOCKS), Name(MOCK), Name(SPY)).any { isAnnotation(annotation, it) }
