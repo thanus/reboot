@@ -21,9 +21,9 @@ internal class AutowiredKtTest : ReBootBase() {
         rewriteAutowiredFieldInjections(compilationUnit)
 
         val expectedCode = """
-            import lombok.AllArgsConstructor;
+            import lombok.RequiredArgsConstructor;
 
-            @AllArgsConstructor
+            @RequiredArgsConstructor
             public class UsersController {
                 private final UsersService usersService;
             }
@@ -109,7 +109,7 @@ internal class AutowiredKtTest : ReBootBase() {
     }
 
     @Test
-    fun `Should not add constructor when class has a constructor with lombok`() {
+    fun `Should not add constructor when class has a constructor with lombok AllArgsConstructor`() {
         val code = """
             import org.springframework.beans.factory.annotation.Autowired;
             import lombok.AllArgsConstructor;
@@ -129,6 +129,35 @@ internal class AutowiredKtTest : ReBootBase() {
             import lombok.AllArgsConstructor;
             
             @AllArgsConstructor(onConstructor = @__(@Autowired))
+            public class UsersController {
+                private final UsersService usersService;
+            }
+        """.trimIndent()
+
+        assertRefactored(compilationUnit, expectedCode)
+    }
+
+    @Test
+    fun `Should not add constructor when class has a constructor with lombok RequiredArgsConstructor`() {
+        val code = """
+            import org.springframework.beans.factory.annotation.Autowired;
+            import lombok.RequiredArgsConstructor;
+            
+            @RequiredArgsConstructor
+            public class UsersController {
+                private final UsersService usersService;
+            }
+        """.trimIndent()
+
+        val compilationUnit = StaticJavaParser.parse(code)
+
+        rewriteAutowiredFieldInjections(compilationUnit)
+
+        val expectedCode = """
+            import org.springframework.beans.factory.annotation.Autowired;
+            import lombok.RequiredArgsConstructor;
+            
+            @RequiredArgsConstructor
             public class UsersController {
                 private final UsersService usersService;
             }

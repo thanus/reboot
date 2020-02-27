@@ -107,7 +107,7 @@ to safer code and easier to test. This is explained in more detail in article [w
 #### Refactoring diff
 
 ```diff
-+@AllArgsConstructor
++@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UsersController {

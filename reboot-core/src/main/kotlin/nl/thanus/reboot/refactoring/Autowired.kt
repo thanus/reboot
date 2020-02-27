@@ -28,15 +28,15 @@ private fun addConstructor(compilationUnit: CompilationUnit) {
 
     if (hasAutowiredAnnotation) {
         compilationUnit.findAll(ClassOrInterfaceDeclaration::class.java)
-                .forEach { it.addMarkerAnnotation("AllArgsConstructor") }
+                .forEach { it.addMarkerAnnotation("RequiredArgsConstructor") }
 
-        compilationUnit.addImport("lombok.AllArgsConstructor")
+        compilationUnit.addImport("lombok.RequiredArgsConstructor")
     }
 }
 
 private fun hasConstructor(compilationUnit: CompilationUnit): Boolean {
     val hasAllArgsConstructor = compilationUnit.findAll(AnnotationExpr::class.java)
-            .any { isAllArgsConstructor(it) }
+            .any { isLombokConstructorAnnotation(it) }
 
     val hasConstructor = compilationUnit.findAll(ClassOrInterfaceDeclaration::class.java)
             .any { it.constructors.isNotEmpty() }
@@ -47,7 +47,8 @@ private fun hasConstructor(compilationUnit: CompilationUnit): Boolean {
 private fun isTest(compilationUnit: CompilationUnit) =
         compilationUnit.findAll(AnnotationExpr::class.java).any { it.name == Name("Test") }
 
-private fun isAllArgsConstructor(annotationExpr: AnnotationExpr) = annotationExpr.name == Name("AllArgsConstructor")
+private fun isLombokConstructorAnnotation(annotationExpr: AnnotationExpr) =
+        annotationExpr.name == Name("RequiredArgsConstructor") || annotationExpr.name == Name("AllArgsConstructor")
 
 private fun containsAutowiredAnnotation(fieldDeclaration: FieldDeclaration) =
         fieldDeclaration.annotations.any { isAutowiredAnnotation(it) }
