@@ -27,6 +27,9 @@ as they also reuse Spring annotations.
 #### Refactoring diff
 
 ```diff
+-import org.springframework.web.bind.annotation.RequestMethod;
++import org.springframework.web.bind.annotation.GetMapping;
+
 @RestController
 @RequestMapping("/users")
 public class UsersController {
@@ -107,6 +110,9 @@ to safer code and easier to test. This is explained in more detail in article [w
 #### Refactoring diff
 
 ```diff
+-import org.springframework.beans.factory.annotation.Autowired;
++import lombok.RequiredArgsConstructor;
+
 +@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
@@ -128,6 +134,10 @@ This is explained in more detail in article [Mockito: Why You Should Not Use Inj
 #### Refactoring diff
 
 ```diff
+-import org.mockito.InjectMocks;
+-import org.mockito.Mock;
++import org.mockito.Mockito;
+
 @ExtendWith(value = MockitoExtension.class)
 class UsersControllerTest {
 -   @Mock
