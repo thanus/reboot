@@ -159,7 +159,7 @@ This can easily be done manually, of course it is better if it is automated.
 
 ### Building from source
 
-ReBoot artifacts aren't published to Maven Central yet. After cloning the project, you can build it from source with:
+After cloning the project, you can build it from source with:
 
 ```shell script
 ./mvnw clean install
@@ -182,7 +182,7 @@ Add reboot-maven-plugin to your POM:
         <plugin>
             <groupId>nl.thanus</groupId>
             <artifactId>reboot-maven-plugin</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
+            <version>0.1.0</version>
         </plugin>
     </plugins>
 </build>
@@ -197,7 +197,7 @@ can use the property `directory`:
         <plugin>
             <groupId>nl.thanus</groupId>
             <artifactId>reboot-maven-plugin</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
+            <version>0.1.0</version>
             <configuration>
                 <directory>/path/to/project</directory>
             </configuration>
@@ -209,7 +209,7 @@ can use the property `directory`:
 Run plugin:
 
 ```shell script
-mvn nl.thanus:reboot-maven-plugin:0.1.0-SNAPSHOT:reboot
+mvn nl.thanus:reboot-maven-plugin:0.1.0:reboot
 ```
 
 ## Contributions are welcome!
