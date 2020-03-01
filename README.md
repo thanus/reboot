@@ -169,7 +169,7 @@ After cloning the project, you can build it from source with:
 
 ```shell script
 cd reboot-core
-java -jar target/reboot-core-0.1.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
+java -jar target/reboot-core-0.2.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
 ```
 
 ### Running reboot-maven-plugin
