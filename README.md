@@ -169,7 +169,7 @@ ReBoot artifacts aren't published to Maven Central yet. After cloning the projec
 
 ```shell script
 cd reboot-core
-java -jar target/reboot-core-1.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
+java -jar target/reboot-core-0.1.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
 ```
 
 ### Running reboot-maven-plugin
@@ -182,7 +182,7 @@ Add reboot-maven-plugin to your POM:
         <plugin>
             <groupId>nl.thanus</groupId>
             <artifactId>reboot-maven-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.1.0-SNAPSHOT</version>
         </plugin>
     </plugins>
 </build>
@@ -197,7 +197,7 @@ can use the property `directory`:
         <plugin>
             <groupId>nl.thanus</groupId>
             <artifactId>reboot-maven-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.1.0-SNAPSHOT</version>
             <configuration>
                 <directory>/path/to/project</directory>
             </configuration>
@@ -209,7 +209,7 @@ can use the property `directory`:
 Run plugin:
 
 ```shell script
-mvn nl.thanus:reboot-maven-plugin:1.0-SNAPSHOT:reboot
+mvn nl.thanus:reboot-maven-plugin:0.1.0-SNAPSHOT:reboot
 ```
 
 ## Contributions are welcome!
