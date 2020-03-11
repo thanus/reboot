@@ -148,12 +148,9 @@ class UsersControllerTest {
 -   private UsersController usersController;
 +   private UsersService usersService = Mockito.mock(UsersService.class);
 +   private UsernameService usernameService = Mockito.mock(UsernameService.class);
-+   private UsersController usersController = new UsersController();
++   private UsersController usersController = new UsersController(usersService, usernameService);
 }
 ```
-
-**Note:** The constructor arguments above, `userService` and `usernameService`, are not passed to `UsersController`. 
-This can easily be done manually, of course it is better if it is automated.
 
 ## Usage
 

@@ -50,10 +50,10 @@ private fun isTest(compilationUnit: CompilationUnit) =
 private fun isLombokConstructorAnnotation(annotationExpr: AnnotationExpr) =
         annotationExpr.name == Name("RequiredArgsConstructor") || annotationExpr.name == Name("AllArgsConstructor")
 
-private fun containsAutowiredAnnotation(fieldDeclaration: FieldDeclaration) =
+fun containsAutowiredAnnotation(fieldDeclaration: FieldDeclaration) =
         fieldDeclaration.annotations.any { isAutowiredAnnotation(it) }
 
-private fun isAutowiredAnnotation(annotationExpr: AnnotationExpr) = annotationExpr.name == Name("Autowired")
+fun isAutowiredAnnotation(annotationExpr: AnnotationExpr) = annotationExpr.name == Name("Autowired")
 
 private fun removeAutowiredOnFieldAndMakeFinal(fieldDeclaration: FieldDeclaration) {
     fieldDeclaration.tryRemoveImportFromCompilationUnit("org.springframework.beans.factory.annotation.Autowired")
