@@ -2,7 +2,7 @@ package nl.thanus.reboot
 
 import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter
-import com.github.javaparser.utils.ParserCollectionStrategy
+import com.github.javaparser.symbolsolver.utils.SymbolSolverCollectionStrategy
 import com.github.javaparser.utils.SourceRoot
 import mu.KotlinLogging
 import nl.thanus.reboot.refactoring.rewriteAutowiredFieldInjections
@@ -11,7 +11,7 @@ import nl.thanus.reboot.refactoring.rewriteRequestMappings
 import nl.thanus.reboot.refactoring.rewriteWebAnnotations
 import java.nio.file.Paths
 
-val logger = KotlinLogging.logger { }
+private val logger = KotlinLogging.logger { }
 
 fun main(args: Array<String>) {
     val location = args.firstOrNull()
@@ -23,18 +23,23 @@ fun main(args: Array<String>) {
 }
 
 private fun parseAndReBoot(location: String) {
-    val path = Paths.get(location)
-    val projectRoot = ParserCollectionStrategy().collect(path)
+    val projectRoot = SymbolSolverCollectionStrategy().collect(Paths.get(location))
+    val (srcRoot, testRoot) = projectRoot.sourceRoots.partition { it.root.toAbsolutePath().toString().contains("/src/") }
 
-    projectRoot.sourceRoots.forEach { sourceRoot ->
-        sourceRoot.parse("") { _, _, result ->
-            val compilationUnit = result.result
-            compilationUnit.ifPresent { reboot(it) }
+    fun parseSourceRootsAndReBoot(sourceRoots: List<SourceRoot>) {
+        sourceRoots.forEach { sourceRoot ->
+            sourceRoot.parse("") { _, _, result ->
+                val compilationUnit = result.result
+                compilationUnit.ifPresent { reboot(it) }
 
-            sourceRoot.setPrinter { LexicalPreservingPrinter.print(it) }
-            SourceRoot.Callback.Result.SAVE
+                sourceRoot.setPrinter { LexicalPreservingPrinter.print(it) }
+                SourceRoot.Callback.Result.SAVE
+            }
         }
     }
+
+    parseSourceRootsAndReBoot(srcRoot)
+    parseSourceRootsAndReBoot(testRoot)
 }
 
 private fun reboot(compilationUnit: CompilationUnit) {

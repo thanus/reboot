@@ -14,7 +14,7 @@ import com.github.javaparser.ast.expr.SimpleName
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
 import mu.KotlinLogging
 
-val logger = KotlinLogging.logger { }
+private val logger = KotlinLogging.logger { }
 
 fun rewriteRequestMappings(compilationUnit: CompilationUnit) {
     compilationUnit.findAll(MethodDeclaration::class.java)
