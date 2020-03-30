@@ -209,5 +209,29 @@ Run plugin:
 mvn nl.thanus:reboot-maven-plugin:0.1.0:reboot
 ```
 
+### Excluding refactorings
+Refactorings can be excluded from ReBoot.
+
+To exclude when you are running the ReBoot jar add the flag -e or --excluded with refactoring you want to exclude. 
+For example:
+```shell script
+java -jar target/reboot-core-0.2.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project -e request-mappings -e autowired-field-injection
+``` 
+
+To exclude refactorings from the maven plugin, add them to the configuration tag like this:
+```xml
+<excluded>
+    <refactoring>request-mappings</refactoring>
+    <refactoring>autowired-field-injection</refactoring>
+</excluded>
+```
+
+The excluded refactorings should be named as:
+* request-mappings
+* web-annotations
+* autowired-field-injection
+* mockito-field-injection
+
+
 ## Contributions are welcome!
 Feel free to suggest and implement improvements.
