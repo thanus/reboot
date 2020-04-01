@@ -51,6 +51,7 @@
         <junit-jupiter.version>5.6.0</junit-jupiter.version>
         <assertj-core.version>3.15.0</assertj-core.version>
         <maven-plugin-api.version>3.6.3</maven-plugin-api.version>
+        <clikt.version>2.6.0</clikt.version>
 
         <!-- Plugins -->
         <ktlint.version>0.36.0</ktlint.version>
@@ -81,6 +82,13 @@
                 <version>${kotlin.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-reflect</artifactId>
+                <version>${kotlin.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>io.github.microutils</groupId>
                 <artifactId>kotlin-logging</artifactId>
                 <version>${kotlin-logging.version}</version>
@@ -105,6 +113,11 @@
                 <artifactId>maven-plugin-annotations</artifactId>
                 <version>${maven-plugin-plugin.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ajalt</groupId>
+                <artifactId>clikt</artifactId>
+                <version>${clikt.version}</version>
             </dependency>
 
             <dependency>
