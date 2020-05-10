@@ -42,16 +42,17 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <kotlin.version>1.3.61</kotlin.version>
+        <kotlin.version>1.3.72</kotlin.version>
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
-        <java-parser.version>3.15.12</java-parser.version>
-        <kotlin-logging.version>1.7.8</kotlin-logging.version>
+        <java-parser.version>3.15.21</java-parser.version>
+        <kotlin-logging.version>1.7.9</kotlin-logging.version>
         <slf4j-api.version>1.7.30</slf4j-api.version>
         <logback-classic.version>1.2.3</logback-classic.version>
-        <junit-jupiter.version>5.6.0</junit-jupiter.version>
-        <assertj-core.version>3.15.0</assertj-core.version>
+        <junit-jupiter.version>5.6.2</junit-jupiter.version>
+        <assertj-core.version>3.16.1</assertj-core.version>
         <maven-plugin-api.version>3.6.3</maven-plugin-api.version>
         <clikt.version>2.6.0</clikt.version>
+        <mockk.version>1.10.0</mockk.version>
 
         <!-- Plugins -->
         <ktlint.version>0.36.0</ktlint.version>
@@ -61,12 +62,11 @@
         <maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
         <maven-plugin-plugin.version>3.6.0</maven-plugin-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
-        <dokka-maven-plugin.version>0.10.0</dokka-maven-plugin.version>
+        <dokka-maven-plugin.version>0.10.1</dokka-maven-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
-        <mockk.version>1.9.3</mockk.version>
     </properties>
 
     <dependencyManagement>
