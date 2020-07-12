@@ -139,7 +139,7 @@ private fun resolveAndMatchConstructorArguments(variableDeclarator: VariableDecl
 }
 
 private fun resolveConstructorArguments(variableDeclarator: VariableDeclarator): List<Type> {
-    val typeDeclaration = variableDeclarator.type.resolve().asReferenceType().typeDeclaration
+    val typeDeclaration = variableDeclarator.type.resolve().asReferenceType().typeDeclaration.unwrap()
 
     if (typeDeclaration !is JavaParserClassDeclaration) {
         return emptyList()

@@ -3,6 +3,7 @@ package nl.thanus.reboot.refactoring
 import com.github.javaparser.HasParentNode
 import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.ImportDeclaration
+import java.util.Optional
 
 fun <T> HasParentNode<T>.tryAddImportToCompilationUnit(import: String) =
         this.findAncestor(CompilationUnit::class.java).ifPresent { it.addImport(import) }
@@ -14,3 +15,5 @@ fun <T> HasParentNode<T>.tryRemoveImportFromCompilationUnit(import: String, isSt
                         it == ImportDeclaration(import, isStatic, false)
                     }?.remove()
         }
+
+fun <T> Optional<T>.unwrap(): T? = orElse(null)
