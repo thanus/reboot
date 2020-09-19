@@ -1,6 +1,7 @@
 # ReBoot
 
 [![Build Status](https://travis-ci.org/thanus/reboot.svg?branch=master)](https://travis-ci.org/thanus/reboot)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/nl.thanus/reboot-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/nl.thanus/reboot-core)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cd0621ed278f46ca9be376351aeec835)](https://www.codacy.com/manual/thanus/reboot?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thanus/reboot&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/thanus/reboot/branch/master/graph/badge.svg)](https://codecov.io/gh/thanus/reboot)
 
