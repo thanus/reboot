@@ -167,7 +167,7 @@ After cloning the project, you can build it from source with:
 
 ```shell script
 cd reboot-core
-java -jar target/reboot-core-0.2.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
+java -jar target/reboot-core-1.1.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project
 ```
 
 ### Running reboot-maven-plugin
@@ -216,7 +216,7 @@ Refactorings can be excluded from ReBoot.
 To exclude when you are running the ReBoot jar add the flag -e or --excluded with refactoring you want to exclude. 
 For example:
 ```shell script
-java -jar target/reboot-core-0.2.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project -e request-mappings -e autowired-field-injection
+java -jar target/reboot-core-1.1.0-SNAPSHOT-jar-with-dependencies.jar /path/to/project -e request-mappings -e autowired-field-injection
 ``` 
 
 To exclude refactorings from the maven plugin, add them to the configuration tag like this:
