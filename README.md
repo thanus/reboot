@@ -180,7 +180,7 @@ Add reboot-maven-plugin to your POM:
         <plugin>
             <groupId>nl.thanus</groupId>
             <artifactId>reboot-maven-plugin</artifactId>
-            <version>0.1.0</version>
+            <version>1.0.0</version>
         </plugin>
     </plugins>
 </build>
@@ -195,7 +195,7 @@ can use the property `directory`:
         <plugin>
             <groupId>nl.thanus</groupId>
             <artifactId>reboot-maven-plugin</artifactId>
-            <version>0.1.0</version>
+            <version>1.0.0</version>
             <configuration>
                 <directory>/path/to/project</directory>
             </configuration>
@@ -207,7 +207,7 @@ can use the property `directory`:
 Run plugin:
 
 ```shell script
-mvn nl.thanus:reboot-maven-plugin:0.1.0:reboot
+mvn nl.thanus:reboot-maven-plugin:1.0.0:reboot
 ```
 
 ### Excluding refactorings

@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <reboot-maven-plugin.version>0.1.0</reboot-maven-plugin.version>
+        <reboot-maven-plugin.version>1.0.0</reboot-maven-plugin.version>
     </properties>
 
     <dependencies>
